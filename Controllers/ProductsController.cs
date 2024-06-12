@@ -21,6 +21,8 @@ namespace Webstore.Controllers
 
         // GET: Products
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Index(int? page, CancellationToken cancellationToken)
         {
             int pageSize = 3;
@@ -31,6 +33,8 @@ namespace Webstore.Controllers
 
         // GET: Products/Details/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Details(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -51,6 +55,8 @@ namespace Webstore.Controllers
         // GET: Products/Create
         [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +65,8 @@ namespace Webstore.Controllers
         // POST: Products/Create
         [Authorize(Roles = "Admin,Seller")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
         {
@@ -74,6 +82,8 @@ namespace Webstore.Controllers
         // GET: Products/Edit/5
         [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Edit(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -92,6 +102,8 @@ namespace Webstore.Controllers
         // POST: Products/Edit/5
         [Authorize(Roles = "Admin,Seller")]
         [HttpPost("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
         {
@@ -126,6 +138,8 @@ namespace Webstore.Controllers
         // GET: Products/Delete/5
         [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Delete(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -146,6 +160,8 @@ namespace Webstore.Controllers
         // POST: Products/Delete/5
         [Authorize(Roles = "Admin,Seller")]
         [HttpPost("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
         {

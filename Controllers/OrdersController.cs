@@ -23,6 +23,8 @@ namespace Webstore.Controllers
         }
         [Authorize]
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Index(CancellationToken cancellationToken, string sortOrder = "", string searchString = "", int? page = 1 )
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -70,6 +72,8 @@ namespace Webstore.Controllers
         // GET: OrdersCart
         [Authorize]
         [HttpGet("Cart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> GetCart(CancellationToken cancellationToken)
         {
             try
@@ -100,6 +104,8 @@ namespace Webstore.Controllers
         // GET: Orders/Create
         [Authorize]
         [HttpGet("Create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public IActionResult Create()
         {
             return View();
@@ -109,6 +115,8 @@ namespace Webstore.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Create([Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
@@ -125,6 +133,8 @@ namespace Webstore.Controllers
         // GET: Orders/Edit/5
         [Authorize]
         [HttpGet("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Edit(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -143,6 +153,8 @@ namespace Webstore.Controllers
         // POST: Orders/Edit/5
         [Authorize]
         [HttpPost("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
         {
@@ -177,6 +189,8 @@ namespace Webstore.Controllers
         // Add to Cart
         [Authorize]
         [HttpPost("AddToCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> AddToCart(int productId, int quantity, CancellationToken cancellationToken)
         {
             // Get the ID of the currently logged-in user
@@ -217,6 +231,8 @@ namespace Webstore.Controllers
         // Checkout
         [Authorize]
         [HttpPost("Checkout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Checkout(CancellationToken cancellationToken)
         {
             // Retrieve the user ID using UserManager
@@ -252,6 +268,8 @@ namespace Webstore.Controllers
         // GET: Orders/Delete/5
         [Authorize(Roles = "Admin")]
         [HttpGet("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Delete(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -272,6 +290,8 @@ namespace Webstore.Controllers
         // POST: Orders/Delete/5
         [Authorize(Roles = "Admin")]
         [HttpPost("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
         {

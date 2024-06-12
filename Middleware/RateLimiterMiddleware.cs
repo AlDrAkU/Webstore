@@ -25,10 +25,19 @@ namespace Webstore.Middleware
             }
         }
 
-        private void ReturnErrorToClient(HttpContext context) {
-
+        private async Task ReturnErrorToClient(HttpContext context)
+        {
             context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
             context.Response.Headers.Append("Retry-After", "10");
+
+            var response = new
+            {
+                status = StatusCodes.Status429TooManyRequests,
+                message = "Too many requests"
+            };
+
+            await context.Response.WriteAsJsonAsync(response);
         }
+
     }
 }

@@ -23,6 +23,8 @@ namespace Webstore.Controllers
 
         // GET: OrderDetails
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var applicationDbContext = _context.OrderDetails.Include(o => o.Order).Include(o => o.Product);
@@ -31,6 +33,8 @@ namespace Webstore.Controllers
 
         // GET: OrderDetails/Details/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Details(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -52,6 +56,8 @@ namespace Webstore.Controllers
 
         // GET: OrderDetails/Create
         [HttpGet("Create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public IActionResult Create()
         {
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
@@ -63,6 +69,8 @@ namespace Webstore.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId,Quantity")] OrderDetail orderDetail, CancellationToken cancellationToken)
         {
@@ -79,6 +87,8 @@ namespace Webstore.Controllers
 
         // GET: OrderDetails/Edit/5
         [HttpGet("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Edit(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -100,6 +110,8 @@ namespace Webstore.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Edit/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId,Quantity")] OrderDetail orderDetail, CancellationToken cancellationToken)
         {
@@ -135,6 +147,8 @@ namespace Webstore.Controllers
 
         // GET: OrderDetails/Delete/5
         [HttpGet("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Delete(int? id, CancellationToken cancellationToken)
         {
             if (id == null)
@@ -156,6 +170,8 @@ namespace Webstore.Controllers
 
         // POST: OrderDetails/Delete/5
         [HttpPost("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
         {
