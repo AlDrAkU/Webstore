@@ -1,0 +1,14 @@
+﻿﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalizer
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <img src="~/static/banner-bookshop.jpg" alt="Superstore Banner" class="w-full h-auto" />
+    <h1 class="display-4 text-3xl font-bold">@ViewLocalizer["Welcome to Superstore"] </h1>
+    <p class="text-lg mt-2 mb-2">@ViewLocalizer["Your one-stop shop for all your needs. We offer a wide range of products at unbeatable prices. Enjoy shopping with us!"]</p>
+
+</div>

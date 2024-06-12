@@ -1,0 +1,59 @@
+﻿﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalizer
+
+@model X.PagedList.IPagedList<Webstore.Models.Order>
+@using X.PagedList.Mvc.Core;
+
+@{
+    Layout = "_Layout";
+    var title = @ViewLocalizer["Orders"];
+}
+
+<head>
+    <title>@title</title>
+</head>
+
+<div class="text-center">
+    <h1 class="display-4 text-3xl font-bold">@ViewLocalizer["Orders"]</h1>
+
+    @foreach (var order in Model)
+    {
+        <div class="my-4">
+            <h2 class="text-2xl font-semibold">@ViewLocalizer["Order"] @order.Id</h2>
+            <hr class="border-gray-200" />
+            <div class="mt-4">
+                <div class="text-lg">
+                    <span class="font-medium">@ViewLocalizer["Order Date:"]</span>
+                    <span>@order.OrderDate</span>
+                </div>
+                <!-- Add other properties of the order you want to display -->
+                <div class="mt-4">
+                    <a href="@Url.Action("Edit", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</a>
+                    <a href="@Url.Action("Details", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">Details</a>
+                    <a href="@Url.Action("Delete", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="mt-8">
+        @Html.PagedListPager(Model, page => "/api/Orders?page=" + page, new PagedListRenderOptions
+   {
+       LinkToFirstPageFormat = "<< First",
+       LinkToPreviousPageFormat = "< Prev",
+       LinkToNextPageFormat = "Next >",
+       LinkToLastPageFormat = "Last >>",
+       MaximumPageNumbersToDisplay = 5,
+       DisplayLinkToIndividualPages = true,
+       DisplayPageCountAndCurrentLocation = false
+   })
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
