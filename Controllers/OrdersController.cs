@@ -117,7 +117,7 @@ namespace Webstore.Controllers
         [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-        public async Task<IActionResult> Create([Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromForm] Order order, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
@@ -156,13 +156,14 @@ namespace Webstore.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(int id, [FromForm] Order order, CancellationToken cancellationToken)
         {
             if (id != order.Id)
             {
                 return NotFound();
             }
-
+            order.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            order.Status = "Submitted";
             if (ModelState.IsValid)
             {
                 try

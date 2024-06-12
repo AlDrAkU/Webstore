@@ -72,7 +72,7 @@ namespace Webstore.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId,Quantity")] OrderDetail orderDetail, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromForm] OrderDetail orderDetail, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace Webstore.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId,Quantity")] OrderDetail orderDetail, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(int id, [FromForm] OrderDetail orderDetail, CancellationToken cancellationToken)
         {
             if (id != orderDetail.Id)
             {

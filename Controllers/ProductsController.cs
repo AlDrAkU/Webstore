@@ -63,6 +63,7 @@ namespace Webstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] Product product)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -100,7 +101,7 @@ namespace Webstore.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(int id, [FromForm] Product product, CancellationToken cancellationToken)
         {
             if (id != product.Id)
             {
