@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webstore.Data;
@@ -48,6 +49,7 @@ namespace Webstore.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -55,8 +57,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Seller")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
@@ -71,6 +72,7 @@ namespace Webstore.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int? id, CancellationToken cancellationToken)
         {
@@ -88,8 +90,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Seller")]
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
@@ -123,6 +124,7 @@ namespace Webstore.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id, CancellationToken cancellationToken)
         {
@@ -142,6 +144,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Products/Delete/5
+        [Authorize(Roles = "Admin,Seller")]
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)

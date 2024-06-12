@@ -23,20 +23,45 @@ namespace Webstore.Controllers
         }
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index(int? page, CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken, string sortOrder = "", string searchString = "", int? page = 1 )
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+
             var orders = from o in _context.Orders
                          .Include(o => o.OrderDetails)
                          .ThenInclude(od => od.Product)
                          .Where(o => o.Status == "Submitted" && o.UserId == userId)
                          select o;
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (int.TryParse(searchString, out int orderId))
+                {
+                    orders = orders.Where(o => o.Id == orderId);
+                }
+            }
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    orders = orders.OrderByDescending(o => o.OrderDate);
+                    break;
+                case "date_asc":
+                    orders = orders.OrderBy(o => o.OrderDate);
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.OrderDate);
+                    break;
+            }
+
             int pageSize = 3;
             var ordersAsIPagedList = await orders.ToPagedListAsync(page ?? 1, pageSize);
 
             return View(ordersAsIPagedList);
         }
+
 
 
 
@@ -73,6 +98,7 @@ namespace Webstore.Controllers
 
 
         // GET: Orders/Create
+        [Authorize]
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -80,8 +106,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
@@ -98,6 +123,7 @@ namespace Webstore.Controllers
         }
 
         // GET: Orders/Edit/5
+        [Authorize]
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int? id, CancellationToken cancellationToken)
         {
@@ -115,8 +141,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate")] Order order, CancellationToken cancellationToken)
@@ -150,6 +175,7 @@ namespace Webstore.Controllers
         }
 
         // Add to Cart
+        [Authorize]
         [HttpPost("AddToCart")]
         public async Task<IActionResult> AddToCart(int productId, int quantity, CancellationToken cancellationToken)
         {
@@ -189,6 +215,7 @@ namespace Webstore.Controllers
 
 
         // Checkout
+        [Authorize]
         [HttpPost("Checkout")]
         public async Task<IActionResult> Checkout(CancellationToken cancellationToken)
         {
@@ -223,6 +250,7 @@ namespace Webstore.Controllers
 
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id, CancellationToken cancellationToken)
         {
@@ -242,6 +270,7 @@ namespace Webstore.Controllers
         }
 
         // POST: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)

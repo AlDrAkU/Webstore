@@ -17,6 +17,17 @@
 <div class="text-center">
     <h1 class="display-4 text-3xl font-bold">@ViewLocalizer["Orders"]</h1>
 
+    <form asp-action="Index" method="get">
+        <input type="text" name="searchString" placeholder="Search by order name" value="@ViewBag.CurrentFilter" />
+        <input type="submit" value="Search" />
+
+        <select name="sortOrder" onchange="this.form.submit();">
+            <option value="">Sort by</option>
+            <option value="date_desc">Date desc</option>
+            <option value="date_asc">Date asc</option>
+        </select>
+    </form>
+
     @foreach (var order in Model)
     {
         <div class="my-4">
@@ -30,8 +41,12 @@
                 <!-- Add other properties of the order you want to display -->
                 <div class="mt-4">
                     <a href="@Url.Action("Edit", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</a>
-                    <a href="@Url.Action("Details", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">Details</a>
-                    <a href="@Url.Action("Delete", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">Delete</a>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Delete", "Orders", new { id = order.Id })" class="inline-block px-4 py-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">Delete</a>
+                    }
+
                 </div>
             </div>
         </div>

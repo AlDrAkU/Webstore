@@ -16,7 +16,7 @@
 <div class="text-center">
     <h1 class="text-3xl font-bold">@ViewLocalizer["Products"]</h1>
 
-    @if (User.Identity.IsAuthenticated && !User.IsInRole("Seller") && !User.IsInRole("Admin"))
+    @if (User.Identity.IsAuthenticated && (User.IsInRole("Seller") || User.IsInRole("Admin")))
     {
         <p class="mt-4">
             <a asp-action="Create" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Create New</a>
@@ -39,12 +39,28 @@
                     <td class="border px-4 py-2">@Html.DisplayFor(modelItem => item.Name)</td>
                     <td class="border px-4 py-2">@Html.DisplayFor(modelItem => item.Price)</td>
                     <td><img src="@item.PhotoUrl" alt="@item.Name" class="w-24 h-24 object-contain" /></td>
-                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Seller") && !User.IsInRole("Admin"))
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Seller") || User.IsInRole("Admin")))
                     {
                         <td class="border px-4 py-2">
                             <a asp-action="Edit" asp-route-id="@item.Id" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</a> |
                             <a asp-action="Details" asp-route-id="@item.Id" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Delete</a> |
+                            <form class="add-to-cart-form d-inline">
+                                <input type="hidden" name="productId" value="@item.Id" />
+                                <select name="quantity" class="form-control d-inline w-auto">
+                                    @for (int i = 1; i <= 10; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                                <button type="button" class="btn btn-primary add-to-cart-btn">Add to Cart</button>
+                            </form>
+                        </td>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Customer"))
+                    {
+                        <td class="border px-4 py-2">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Details</a> |
                             <form class="add-to-cart-form d-inline">
                                 <input type="hidden" name="productId" value="@item.Id" />
                                 <select name="quantity" class="form-control d-inline w-auto">

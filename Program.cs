@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews().AddViewLocalization();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -54,6 +55,37 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+}
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // Define your roles here
+    string[] roles = new string[] { "Admin", "Seller", "Customer" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Define your users here
+    IdentityUser admin = new IdentityUser { UserName = "admin@admin.com", Email = "admin@admin.com" };
+    IdentityUser seller = new IdentityUser { UserName = "seller@store.com", Email = "seller@store.com" };
+    IdentityUser customer = new IdentityUser { UserName = "user@store.com", Email = "user@store.com" };
+
+    // Add to database and assign roles
+    await userManager.CreateAsync(admin, "Admin123!");
+    await userManager.CreateAsync(seller, "Seller123!");
+    await userManager.CreateAsync(customer, "Customer123!");
+
+    await userManager.AddToRoleAsync(admin, "Admin");
+    await userManager.AddToRoleAsync(seller, "Seller");
+    await userManager.AddToRoleAsync(customer, "Customer");
 }
 app.UseMiddleware<RateLimiterMiddleware>();
 app.UseHttpsRedirection();
