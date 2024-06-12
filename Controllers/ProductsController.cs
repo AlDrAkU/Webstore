@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webstore.Data;
 using Webstore.Models;
@@ -53,22 +52,16 @@ namespace Webstore.Controllers
         }
 
         // GET: Products/Create
-        [Authorize(Roles = "Admin,Seller")]
         [HttpGet("Create")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public IActionResult Create()
-        {
+    {
             return View();
         }
 
-        // POST: Products/Create
-        [Authorize(Roles = "Admin,Seller")]
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+        // POST: Products/CreateProduct
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,PhotoUrl")] Product product, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromForm] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -78,6 +71,8 @@ namespace Webstore.Controllers
             }
             return View(product);
         }
+
+
 
         // GET: Products/Edit/5
         [Authorize(Roles = "Admin,Seller")]
